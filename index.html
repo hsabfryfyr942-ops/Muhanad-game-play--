@@ -37,23 +37,11 @@
             box-shadow: 0 0 20px var(--primary); transition: 0.3s;
         }
 
-        /* الزر الجديد المميز في الصفحة الرئيسية */
         .special-btn {
-            background: var(--success);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            display: block;
-            width: 90%;
-            max-width: 600px;
-            margin: 20px auto;
-            border: 3px solid white;
-            box-shadow: 0 0 15px var(--success);
-            animation: pulse 2s infinite;
-            cursor: pointer;
+            background: var(--success); color: white; padding: 20px; border-radius: 15px;
+            font-size: 1.5rem; font-weight: bold; text-decoration: none; display: block;
+            width: 90%; max-width: 600px; margin: 20px auto; border: 3px solid white;
+            box-shadow: 0 0 15px var(--success); animation: pulse 2s infinite; cursor: pointer;
         }
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(19, 185, 19, 0.7); }
@@ -113,8 +101,6 @@
 
     <div id="home-page" class="page-section">
         <h2 style="color: var(--secondary);">القائمة الرئيسية</h2>
-        
-        <!-- الزر الجديد في مقدمة الصفحة الرئيسية -->
         <button class="special-btn" onclick="window.open('https://hsabfryfyr942-ops.github.io/Muhanad-game-play--/')">
             🎮 دخول مركز اللعب المباشر (جديد) 🚀
         </button>
@@ -129,21 +115,34 @@
         <button class="btn-nav" style="background: var(--share); margin-top:10px; padding:10px 40px;" onclick="shareWebsite()">📤 مشاركة الموقع</button>
     </div>
 
-    <!-- باقي الأقسام كما هي... -->
     <div id="free-page" class="page-section">
         <h2 style="color: var(--success);">🔗 الألعاب والتصويت</h2>
         <div style="margin-bottom:20px;"><button onclick="secureReset()" style="background:var(--danger); border:none; padding:10px; border-radius:5px; color:white; cursor:pointer;">🔐 تصفير</button></div>
-        
         <h3 class="section-title">🎮 ألعاب مجانية</h3>
         <div class="games-container" id="free-games-list"></div>
         <h3 class="section-title">💳 ألعاب مدفوعة</h3>
         <div class="games-container" id="paid-games-list"></div>
-
         <div class="comments-section">
             <h3>💬 تعليقات اللاعبين</h3>
             <input type="text" id="comment-input" class="comment-input" placeholder="اكتب رأيك هنا...">
             <button class="btn-nav" style="width:100%;" onclick="addComment()">نشر التعليق</button>
             <div id="comments-display" style="margin-top:15px;"></div>
+        </div>
+        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
+    </div>
+
+    <div id="contact-page" class="page-section">
+        <h2 style="color: #E1306C;">📸 تواصل معنا</h2>
+        <div class="info-text" style="text-align: center;">
+            <p>لديك استفسار أو ترغب في الدعم الفني؟ يمكنك التواصل معنا عبر:</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; border: 1px solid var(--secondary); max-width: 500px; margin: 10px auto;">
+                <h3 style="color: var(--secondary);">Email & Social</h3>
+                <p>البريد الإلكتروني: <br> <strong style="color: var(--share); font-size: 1.2rem;">hsabfryfyr942@gmail.com</strong></p>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+                    <button class="btn-nav" style="background: var(--primary);" onclick="window.open('mailto:hsabfryfyr942@gmail.com')">✉️ مراسلة فورية</button>
+                    <button class="btn-nav" style="background: #E1306C;" onclick="window.open('https://instagram.com/muhanad_account')">📸 Instagram</button>
+                </div>
+            </div>
         </div>
         <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
@@ -156,30 +155,16 @@
 
     <div id="guide-page" class="page-section"><h2 style="color: var(--secondary);">💰 دليل الشحن</h2><div id="guide-content"></div><button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button></div>
 
-    <div id="contact-page" class="page-section">
-        <h2 style="color: #E1306C;">📸 تواصل معنا</h2>
-        <div class="info-text" style="text-align: center;">
-            <p>لديك استفسار؟ تواصل معنا مباشرة.</p>
-            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; border: 1px solid var(--secondary);">
-                <h3 style="color: var(--secondary);">Instagram</h3>
-                <p>الحساب: <strong>muhanad_account</strong></p>
-                <button class="btn-nav" onclick="window.open('https://instagram.com/muhanad_account')">مراسلة الآن</button>
-            </div>
-        </div>
-        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
-    </div>
-
     <div id="about-page" class="page-section">
         <h2 style="color: var(--secondary);">ℹ️ من نحن</h2>
         <div class="info-text">
-            <p><strong>Muhanad Game Hub</strong> هو وجهتك الأولى لاحتراف الألعاب وتحميلها في 2026.</p>
+            <p><strong>Muhanad Game Hub</strong> هو وجهتك الأولى لاحتراف الألعاب وتحميلها في 2026. نسعى لتقديم أفضل تجربة للاعبين العرب.</p>
         </div>
         <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
     <script>
         const ADMIN_PASS = "muhanad2026";
-        // التعديل هنا: تم تحديث الرابط لزر المشاركة
         const MY_URL = "https://hsabfryfyr942-ops.github.io/Muhanad-game-play--/"; 
 
         const freeGames = [
@@ -191,7 +176,10 @@
         ];
 
         const paidGames = [
-            { id: 'elden', name: 'Elden Ring', link: 'https://bandainamcoent.com', shipping: '59.99$', device: 'RTX 3060', tips: 'تعلم حركات العدو جيداً.' },
+            { id: 'fhz5', name: 'Forza Horizon 5', link: 'https://www.xbox.com/games/forza-horizon-5', shipping: '59.99$', device: 'PC / Xbox', tips: 'استخدم الفرملة اليدوية في المنعطفات الحادة للحفاظ على السرعة.' },
+            { id: 'nfs', name: 'NFS Unbound', link: 'https://www.ea.com/games/need-for-speed/need-for-speed-unbound', shipping: '69.99$', device: 'RTX 3060', tips: 'اجمع النيترو عبر التفحيط (Drift) واستخدمه في الخطوط المستقيمة.' },
+            { id: 'mc', name: 'Minecraft', link: 'https://www.minecraft.net', shipping: '6.99$', device: 'All Devices', tips: 'احمل دائماً دلو ماء للنجاة من السقوط المرتفع.' },
+            { id: 'elden', name: 'Elden Ring', link: 'https://bandainamcoent.com', shipping: '59.99$', device: 'RTX 3060', tips: 'تعلم حركات العدو جيداً قبل الهجوم.' },
             { id: 'gow', name: 'God of War', link: 'https://store.epicgames.com', shipping: '49.99$', device: 'GTX 1660', tips: 'الصد المثالي يفتح لك فرصة لضربة قاضية.' }
         ];
 
@@ -231,13 +219,8 @@
 
         function shareWebsite() {
             if (navigator.share) { 
-                navigator.share({ 
-                    title: 'Muhanad Game Hub', 
-                    text: 'تحقق من مركز ألعاب مهند الجديد!',
-                    url: MY_URL 
-                }); 
-            }
-            else { 
+                navigator.share({ title: 'Muhanad Game Hub', text: 'تحقق من مركز ألعاب مهند الجديد!', url: MY_URL }); 
+            } else { 
                 navigator.clipboard.writeText(MY_URL); 
                 alert("تم نسخ رابط مركز اللعب: " + MY_URL); 
             }
