@@ -3,249 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مmuhanad game @22🎮</title>
+    <title>Muhanad Game Hub 2026 | النسخة الاحترافية</title>
     <style>
         :root {
             --primary: #dd3e17;
             --secondary: #ffca28;
             --success: #13b913;
+            --danger: #ff4444;
+            --share: #0077ff;
+            --dark-card: rgba(20, 20, 30, 0.98);
         }
 
         body { 
-            margin: 0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('مهند صورة.png'); 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
+            margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('مهند صورة.png');
+            background-size: cover; background-attachment: fixed; color: white;
             overflow-x: hidden;
         }
-        
-        .page-section { 
-            display: none; padding: 40px; text-align: center; min-height: 100vh; 
-            flex-direction: column; box-sizing: border-box; align-items: center;
-            animation: fadeIn 0.4s ease-out; 
+
+        .news-ticker {
+            background: var(--primary); padding: 10px; overflow: hidden; white-space: nowrap;
+            font-weight: bold; border-bottom: 2px solid var(--secondary);
+        }
+        .ticker-text { display: inline-block; animation: scroll 30s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .page-section { display: none; padding: 40px 20px; text-align: center; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; }
+
+        #start-screen { display: flex; background: rgba(0,0,0,0.85); }
+        .start-btn {
+            background: var(--primary); color: white; border: none; padding: 20px 50px;
+            font-size: 1.8rem; border-radius: 50px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 0 20px var(--primary); transition: 0.3s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #home-page { display: flex; justify-content: center; position: relative; }
-
-        .nav-buttons { display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap; justify-content: center; }
-        
-        .btn { 
-            padding: 12px 30px; font-size: 18px; border: none; border-radius: 8px; 
-            cursor: pointer; transition: 0.3s; font-weight: bold; text-decoration: none; 
-        }
-        
-        .btn-orange { background-color: var(--primary); color: white; }
-        .btn-orange:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(221, 62, 23, 0.4); }
-        
-        .btn-gray { background-color: rgba(255, 255, 255, 0.1); color: white; border: 1px solid white; }
-        .btn-gray:hover { background-color: white; color: black; }
-
-        .games-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; width: 100%; max-width: 1200px; }
-        
-        .card { 
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px; border-radius: 15px; width: 200px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); color: #333; position: relative; 
-            transition: 0.3s; border: 2px solid transparent;
-        }
-
-        .rank-1 { border-color: var(--secondary); transform: scale(1.05); z-index: 2; }
-        
-        .badge { 
-            color: white; padding: 5px 12px; border-radius: 5px; font-size: 12px; 
-            position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-weight: bold;
-        }
-        .badge-1 { background: var(--secondary); color: #000; }
-
-        .btn-vote, .btn-download { border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
-        .btn-vote { background: var(--primary); color: white; }
-        .btn-download { background: var(--success); color: white; }
-        
-        .progress-container { background: #eee; border-radius: 10px; margin: 10px 0; height: 8px; overflow: hidden; }
-        .progress-bar { background: var(--primary); height: 100%; transition: width 0.6s ease; }
-
-        header { background: rgba(0, 0, 0, 0.5); width: 100%; padding: 20px; margin-bottom: 30px; border-radius: 10px; }
-        .section-title { color: var(--secondary); margin-top: 40px; border-bottom: 2px solid var(--secondary); padding-bottom: 5px; width: fit-content; }
-        
-        .back-home { margin-top: 30px; background: #444; color: white; padding: 10px 30px; border: none; border-radius: 5px; cursor: pointer; }
-
-        /* زر الإدارة المخفي */
-        .admin-secret-btn {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            width: 30px;
-            height: 30px;
-            background: transparent;
-            border: none;
+        /* الزر الجديد المميز في الصفحة الرئيسية */
+        .special-btn {
+            background: var(--success);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            border: 3px solid white;
+            box-shadow: 0 0 15px var(--success);
+            animation: pulse 2s infinite;
             cursor: pointer;
-            opacity: 0.1; /* شفاف جداً لدرجة أنه غير مرئي تقريباً */
-            z-index: 9999;
         }
-        .admin-secret-btn:hover { opacity: 0.5; background: rgba(255,0,0,0.2); border-radius: 50%; }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(19, 185, 19, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(19, 185, 19, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(19, 185, 19, 0); }
+        }
 
-        #vote-alert {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: var(--success); color: white; padding: 10px 25px;
-            border-radius: 50px; display: none; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        .nav-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px; width: 100%; max-width: 1000px; margin: 20px auto;
         }
+        .btn-nav {
+            background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+        .btn-nav:hover { background: var(--primary); transform: translateY(-3px); }
+
+        .comments-section {
+            background: var(--dark-card); padding: 20px; border-radius: 15px;
+            width: 100%; max-width: 800px; margin-top: 30px; text-align: right;
+        }
+        .comment-input {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444;
+            background: #111; color: white; margin-bottom: 10px; box-sizing: border-box;
+        }
+        .comment-box {
+            background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;
+            margin-bottom: 8px; border-right: 4px solid var(--primary);
+        }
+
+        .vote-btn {
+            background: #333; border: 1px solid #555; color: white; padding: 12px 30px; 
+            border-radius: 30px; cursor: pointer; transition: 0.2s; position: relative;
+        }
+        @keyframes votePop { 0% { transform: scale(1); } 50% { transform: scale(1.4); background-color: var(--success); } 100% { transform: scale(1); } }
+        .vote-active { animation: votePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        .games-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; width: 100%; max-width: 1200px; }
+        .card { background: var(--dark-card); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .section-title { color: var(--secondary); margin: 30px 0 15px 0; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px; }
+        .back-btn { background: #444; color: white; padding: 12px 35px; border: none; border-radius: 8px; cursor: pointer; margin-top: 30px; }
+        
+        .info-text { max-width: 800px; line-height: 1.8; font-size: 1.1rem; text-align: justify; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
-    <div id="vote-alert">شكراً لتصويتك! ✨</div>
+    <div class="news-ticker">
+        <div class="ticker-text">🕹️ مرحباً بك في Muhanad Game Hub | 🎮 تم افتتاح مركز اللعب المباشر الآن! | 💡 نصائح احترافية حصرية | 🔗 muhanad-game.github.io</div>
+    </div>
 
-    <!-- الصفحة الرئيسية -->
+    <div id="start-screen" class="page-section">
+        <h1 style="color: var(--secondary); font-size: 3.5rem;">Muhanad Game Hub</h1>
+        <button class="start-btn" onclick="showSection('home-page')">ابدأ التصفح 🚀</button>
+    </div>
+
     <div id="home-page" class="page-section">
-        <h1>🎮 منصة الألعاب الكبرى</h1>
-        <p>تصفح الروابط وصوّت للأفضل في مكان واحد</p>
-        <div class="nav-buttons">
-            <button class="btn btn-orange" onclick="showSection('games-page')">ابدأ التصفح 🚀</button>
-            <button class="btn btn-orange" onclick="showSection('vote-page')">صوّت الآن 🗳️</button>
-            <button class="btn btn-gray" onclick="showSection('about-page')">من نحن</button>
-            <button class="btn btn-gray" onclick="showSection('contact-page')">اتصل بنا</button>
-        </div>
+        <h2 style="color: var(--secondary);">القائمة الرئيسية</h2>
         
-        <!-- زر التصفير المخفي (في الركن السفلي الأيسر) -->
-        <button class="admin-secret-btn" onclick="resetAllVotes()" title="إدارة النظام"></button>
+        <!-- الزر الجديد في مقدمة الصفحة الرئيسية -->
+        <button class="special-btn" onclick="window.open('https://hsabfryfyr942-ops.github.io/Muhanad-game-play--/')">
+            🎮 دخول مركز اللعب المباشر (جديد) 🚀
+        </button>
+
+        <div class="nav-grid">
+            <button class="btn-nav" onclick="showSection('pro-page')" style="background: var(--primary);">🔥 نصائح الاحتراف</button>
+            <button class="btn-nav" onclick="showSection('free-page')">🎮 روابط الألعاب</button>
+            <button class="btn-nav" onclick="showSection('guide-page')">💰 الأسعار والأجهزة</button>
+            <button class="btn-nav" onclick="showSection('contact-page')">📸 تواصل معنا</button>
+            <button class="btn-nav" onclick="showSection('about-page')">ℹ️ من نحن</button>
+        </div>
+        <button class="btn-nav" style="background: var(--share); margin-top:10px; padding:10px 40px;" onclick="shareWebsite()">📤 مشاركة الموقع</button>
     </div>
 
-    <!-- صفحة الألعاب -->
-    <div id="games-page" class="page-section">
-        <header><h1>روابط التحميل المباشرة</h1></header>
-        <h2 class="section-title">🎁 ألعاب مجانية</h2>
-        <div class="games-container" id="list-free-download"></div>
-        <h2 class="section-title">💰 ألعاب مدفوعة</h2>
-        <div class="games-container" id="list-paid-download"></div>
-        <button class="back-home" onclick="showSection('home-page')">رجوع</button>
+    <div id="free-page" class="page-section">
+        <h2 style="color: var(--success);">🔗 الألعاب والتصويت</h2>
+        <div style="margin-bottom:20px;"><button onclick="secureReset()" style="background:var(--danger); border:none; padding:10px; border-radius:5px; color:white; cursor:pointer;">🔐 تصفير</button></div>
+        
+        <h3 class="section-title">🎮 ألعاب مجانية</h3>
+        <div class="games-container" id="free-games-list"></div>
+        <h3 class="section-title">💳 ألعاب مدفوعة</h3>
+        <div class="games-container" id="paid-games-list"></div>
+
+        <div class="comments-section">
+            <h3>💬 تعليقات اللاعبين</h3>
+            <input type="text" id="comment-input" class="comment-input" placeholder="اكتب رأيك هنا...">
+            <button class="btn-nav" style="width:100%;" onclick="addComment()">نشر التعليق</button>
+            <div id="comments-display" style="margin-top:15px;"></div>
+        </div>
+        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
-    <!-- صفحة التصويت -->
-    <div id="vote-page" class="page-section">
-        <header><h1>لوحة المتصدرين</h1></header>
-        <h2 class="section-title">🔥 التصويت للمجاني</h2>
-        <div class="games-container" id="vote-free-container"></div>
-        <h2 class="section-title">💎 التصويت للمدفوع</h2>
-        <div class="games-container" id="vote-paid-container"></div>
-        <button class="back-home" onclick="showSection('home-page')">رجوع</button>
+    <div id="pro-page" class="page-section">
+        <h2 style="color: var(--primary);">🔥 دليل احتراف الألعاب</h2>
+        <div id="pro-tips-content" style="width:100%; max-width:900px;"></div>
+        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
-    <!-- من نحن -->
-    <div id="about-page" class="page-section">
-        <header><h1>من نحن</h1></header>
-        <p style="max-width: 600px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px;">نحن منصة تهدف لمساعدة اللاعبين على اختيار أفضل الألعاب وتوفير روابطها الرسمية في مكان واحد.</p>
-        <button class="back-home" onclick="showSection('home-page')">رجوع</button>
-    </div>
+    <div id="guide-page" class="page-section"><h2 style="color: var(--secondary);">💰 دليل الشحن</h2><div id="guide-content"></div><button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button></div>
 
-    <!-- اتصل بنا -->
     <div id="contact-page" class="page-section">
-        <header><h1>اتصل بنا</h1></header>
-        <p>البريد الإلكتروني الرسمي:</p>
-        <h2 style="color: var(--secondary);">hsabfryfyr942@gmail.com</h2>
-        <button class="back-home" onclick="showSection('home-page')">رجوع</button>
+        <h2 style="color: #E1306C;">📸 تواصل معنا</h2>
+        <div class="info-text" style="text-align: center;">
+            <p>لديك استفسار؟ تواصل معنا مباشرة.</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; border: 1px solid var(--secondary);">
+                <h3 style="color: var(--secondary);">Instagram</h3>
+                <p>الحساب: <strong>muhanad_account</strong></p>
+                <button class="btn-nav" onclick="window.open('https://instagram.com/muhanad_account')">مراسلة الآن</button>
+            </div>
+        </div>
+        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
+    </div>
+
+    <div id="about-page" class="page-section">
+        <h2 style="color: var(--secondary);">ℹ️ من نحن</h2>
+        <div class="info-text">
+            <p><strong>Muhanad Game Hub</strong> هو وجهتك الأولى لاحتراف الألعاب وتحميلها في 2026.</p>
+        </div>
+        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
     <script>
+        const ADMIN_PASS = "muhanad2026";
+        const MY_URL = "https://muhanad-game.github.io"; 
+
         const freeGames = [
-            { id: 'freefire', name: 'Free Fire', link: 'https://garena.com' },
-            { id: 'pubg', name: 'PUBG', link: 'https://www.pubgmobile.com' },
-            { id: 'fortnite', name: 'Fortnite', link: 'https://fortnite.com' },
-            { id: 'amongus', name: 'Among Us', link: 'https://innersloth.com' },
-            { id: 'clash', name: 'Clash of Clans', link: 'https://supercell.com' }
+            { id: 'ff', name: 'Free Fire', link: 'https://garena.com', shipping: '100=1$', device: 'Samsung A15', tips: 'للهيدشوت: اجعل حساسية العام 95 والعدسة 100.' },
+            { id: 'pubg', name: 'PUBG Mobile', link: 'https://pubgmobile.com', shipping: '60 UC=0.99$', device: 'Infinix Note 40', tips: 'احتراف الجيروسكوب يقلل الارتداد بنسبة 70%.' },
+            { id: 'clash', name: 'Clash of Clans', link: 'https://supercell.com', shipping: '5$', device: 'Galaxy Tab A9', tips: 'ركز على تطوير الدفاعات الجوية أولاً.' },
+            { id: 'fortnite', name: 'Fortnite', link: 'https://fortnite.com', shipping: '8$', device: 'Poco X6 Pro', tips: 'البناء هو المفتاح؛ خصص أزراراً قريبة.' },
+            { id: 'amongus', name: 'Among Us', link: 'https://innersloth.com', shipping: 'Skins', device: 'Redmi 13C', tips: 'كمخرب: لا تستخدم الفتحات إلا بحذر.' }
         ];
 
         const paidGames = [
-            { id: 'elden', name: 'Elden Ring', link: 'https://www.bandainamcoent.com' },
-            { id: 'gow', name: 'God of War', link: ' https://store.epicgames.com/ar/p/god-of-war' },
-            { id: 'bg3', name: 'Baldur\'s Gate 3', link: 'https://baldursgate3.game' },
-            { id: 'forza', name: 'Forza Horizon 5', link: 'https://forza.net' },
-            { id: 'zelda', name: 'Zelda: TotK', link: 'https://www.zelda.com' }
+            { id: 'elden', name: 'Elden Ring', link: 'https://bandainamcoent.com', shipping: '59.99$', device: 'RTX 3060', tips: 'تعلم حركات العدو جيداً.' },
+            { id: 'gow', name: 'God of War', link: 'https://store.epicgames.com', shipping: '49.99$', device: 'GTX 1660', tips: 'الصد المثالي يفتح لك فرصة لضربة قاضية.' }
         ];
 
-        // مصفوفة افتراضية للأصوات لتجنب NaN
-        const defaultVotes = {
-            freefire: 0, pubg: 0, fortnite: 0, amongus: 0, clash: 0,
-            elden: 0, gow: 0, bg3: 0, forza: 0, zelda: 0
-        };
-
-        let votes = JSON.parse(localStorage.getItem('gameVotes')) || {...defaultVotes};
+        let votes = JSON.parse(localStorage.getItem('m_votes')) || {};
+        let comments = JSON.parse(localStorage.getItem('m_comments')) || [];
 
         function showSection(id) {
             document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
             document.getElementById(id).style.display = 'flex';
-            if(id === 'games-page') renderDownloadPage();
-            if(id === 'vote-page') updateVoteDisplay();
-            window.scrollTo(0, 0);
+            if(id === 'free-page') { renderAllGames(); renderComments(); }
+            if(id === 'pro-page') renderTips();
+            if(id === 'guide-page') renderGuide();
+            window.scrollTo(0,0);
         }
 
-        // وظيفة التصفير السرية
-        function resetAllVotes() {
-            if (confirm("⚠️ هل أنت متأكد من تصفير كافة أصوات الألعاب؟ لا يمكن التراجع عن هذا الإجراء.")) {
-                votes = {...defaultVotes};
-                localStorage.setItem('gameVotes', JSON.stringify(votes));
-                alert("✅ تم تصفير النتائج بنجاح.");
-                location.reload(); // إعادة تحميل الصفحة لتحديث البيانات
+        function addComment() {
+            const input = document.getElementById('comment-input');
+            if(input.value.trim() !== "") {
+                comments.unshift(input.value);
+                localStorage.setItem('m_comments', JSON.stringify(comments));
+                input.value = "";
+                renderComments();
             }
         }
 
-        function castVote(id) {
-            votes[id] = (votes[id] || 0) + 1;
-            localStorage.setItem('gameVotes', JSON.stringify(votes));
-            updateVoteDisplay();
-            
-            const alertBox = document.getElementById('vote-alert');
-            alertBox.style.display = 'block';
-            setTimeout(() => alertBox.style.display = 'none', 2000);
+        function renderComments() {
+            document.getElementById('comments-display').innerHTML = comments.slice(0, 5).map(c => `<div class="comment-box">${c}</div>`).join('');
         }
 
-        function updateVoteDisplay() {
-            const renderCategory = (list, containerId) => {
-                const total = list.reduce((sum, g) => sum + (votes[g.id] || 0), 0);
-                const sorted = [...list].sort((a, b) => (votes[b.id] || 0) - (votes[a.id] || 0));
-                
-                document.getElementById(containerId).innerHTML = sorted.map((g, index) => {
-                    const count = votes[g.id] || 0;
-                    const percent = total === 0 ? 0 : Math.round((count / total) * 100);
-                    const isTop = index === 0 && count > 0;
-
-                    return `
-                        <div class="card ${isTop ? 'rank-1' : ''}">
-                            ${isTop ? '<div class="badge badge-1">🥇 المتصدر</div>' : ''}
-                            <h3>${g.name}</h3>
-                            <button class="btn-vote" onclick="castVote('${g.id}')">صوّت</button>
-                            <p>الأصوات: <b>${count}</b></p>
-                            <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
-                            <span style="color:var(--primary); font-weight:bold">${percent}%</span>
-                        </div>
-                    `;
-                }).join('');
-            };
-            renderCategory(freeGames, 'vote-free-container');
-            renderCategory(paidGames, 'vote-paid-container');
+        function castVote(gameId, btn) {
+            votes[gameId] = (votes[gameId] || 0) + 1;
+            localStorage.setItem('m_votes', JSON.stringify(votes));
+            document.getElementById(`count-${gameId}`).innerText = votes[gameId];
+            btn.classList.add('vote-active');
+            setTimeout(() => btn.classList.remove('vote-active'), 500);
         }
 
-        function renderDownloadPage() {
-            const fill = (list, containerId) => {
-                document.getElementById(containerId).innerHTML = list.map(g => `
-                    <div class="card">
-                        <h3>${g.name}</h3>
-                        <button class="btn-download" onclick="window.open('${g.link}')">تحميل / زيارة</button>
-                    </div>
-                `).join('');
-            };
-            fill(freeGames, 'list-free-download');
-            fill(paidGames, 'list-paid-download');
+        function shareWebsite() {
+            if (navigator.share) { navigator.share({ title: 'Muhanad Game Hub', url: MY_URL }); }
+            else { navigator.clipboard.writeText(MY_URL); alert("تم نسخ الرابط!"); }
         }
 
-        showSection('home-page');
+        function secureReset() {
+            if (prompt("كلمة السر:") === ADMIN_PASS) { votes = {}; localStorage.removeItem('m_votes'); renderAllGames(); }
+        }
+
+        function createCard(g) {
+            return `<div class="card"><h3>${g.name}</h3><button class="btn-nav" style="width:100%; background:var(--primary); margin:10px 0;" onclick="window.open('${g.link}')">تحميل</button>
+                    <button class="vote-btn" onclick="castVote('${g.id}', this)">👍 <span id="count-${g.id}">${votes[g.id] || 0}</span></button></div>`;
+        }
+
+        function renderAllGames() {
+            document.getElementById('free-games-list').innerHTML = freeGames.map(g => createCard(g)).join('');
+            document.getElementById('paid-games-list').innerHTML = paidGames.map(g => createCard(g)).join('');
+        }
+
+        function renderTips() {
+            const all = [...freeGames, ...paidGames];
+            document.getElementById('pro-tips-content').innerHTML = all.map(g => `
+                <div style="background:var(--dark-card); padding:20px; border-radius:15px; border-right:5px solid var(--secondary); margin-bottom:15px; text-align:right;">
+                    <h3 style="color:var(--secondary);">${g.name}</h3>
+                    <p style="color:#ccc; line-height:1.6;">${g.tips}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderGuide() {
+            const all = [...freeGames, ...paidGames];
+            document.getElementById('guide-content').innerHTML = all.map(g => `
+                <div style="background:var(--dark-card); padding:15px; margin-bottom:10px; border-radius:10px; display:flex; justify-content:space-between; width:100%; max-width:800px;">
+                    <strong>${g.name}</strong> <span>💰 ${g.shipping}</span> <span>💻 ${g.device}</span>
+                </div>
+            `).join('');
+        }
+
+        showSection('start-screen');
     </script>
 </body>
 </html>
