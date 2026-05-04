@@ -129,6 +129,7 @@
         <button class="btn-nav" style="background: var(--share); margin-top:10px; padding:10px 40px;" onclick="shareWebsite()">📤 مشاركة الموقع</button>
     </div>
 
+    <!-- باقي الأقسام كما هي... -->
     <div id="free-page" class="page-section">
         <h2 style="color: var(--success);">🔗 الألعاب والتصويت</h2>
         <div style="margin-bottom:20px;"><button onclick="secureReset()" style="background:var(--danger); border:none; padding:10px; border-radius:5px; color:white; cursor:pointer;">🔐 تصفير</button></div>
@@ -178,7 +179,8 @@
 
     <script>
         const ADMIN_PASS = "muhanad2026";
-        const MY_URL = "https://muhanad-game.github.io"; 
+        // التعديل هنا: تم تحديث الرابط لزر المشاركة
+        const MY_URL = "https://hsabfryfyr942-ops.github.io/Muhanad-game-play--/"; 
 
         const freeGames = [
             { id: 'ff', name: 'Free Fire', link: 'https://garena.com', shipping: '100=1$', device: 'Samsung A15', tips: 'للهيدشوت: اجعل حساسية العام 95 والعدسة 100.' },
@@ -228,8 +230,17 @@
         }
 
         function shareWebsite() {
-            if (navigator.share) { navigator.share({ title: 'Muhanad Game Hub', url: MY_URL }); }
-            else { navigator.clipboard.writeText(MY_URL); alert("تم نسخ الرابط!"); }
+            if (navigator.share) { 
+                navigator.share({ 
+                    title: 'Muhanad Game Hub', 
+                    text: 'تحقق من مركز ألعاب مهند الجديد!',
+                    url: MY_URL 
+                }); 
+            }
+            else { 
+                navigator.clipboard.writeText(MY_URL); 
+                alert("تم نسخ رابط مركز اللعب: " + MY_URL); 
+            }
         }
 
         function secureReset() {
