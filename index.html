@@ -19,6 +19,7 @@
             overflow-x: hidden;
         }
 
+        /* شريط الخبر العلوي */
         .news-ticker {
             background: var(--primary); padding: 10px; overflow: hidden; white-space: nowrap;
             font-weight: bold; border-bottom: 2px solid var(--secondary); position: fixed; top: 0; width: 100%; z-index: 1000;
@@ -26,6 +27,7 @@
         .ticker-text { display: inline-block; animation: scroll 25s linear infinite; }
         @keyframes scroll { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
+        /* تنسيق الصفحات */
         .page-section { display: none; padding: 100px 20px 40px; text-align: center; min-height: 100vh; flex-direction: column; align-items: center; }
 
         .nav-grid {
@@ -60,7 +62,6 @@
             box-shadow: 0 0 20px var(--primary); transition: 0.3s; margin-top: 20px;
         }
 
-        /* تصاميم العناوين الفرعية للألعاب */
         .category-title {
             grid-column: 1 / -1;
             text-align: right;
@@ -105,39 +106,44 @@
         <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
-    <!-- صفحة الألعاب (محدثة بالفصل) -->
+    <!-- صفحة الألعاب -->
     <div id="games-page" class="page-section">
-        <h2 style="color: var(--success);">دليل الألعاب 2026</h2>
+        <h2 style="color: var(--success);">روابط تحميل الألعاب</h2>
         <div class="games-grid" id="games-list-container"></div>
         <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
-    <!-- باقي الصفحات كما هي -->
+    <!-- صفحة النصائح -->
     <div id="tips-page" class="page-section">
         <h2 style="color: var(--primary);">دليل احتراف الألعاب</h2>
         <div id="tips-container" style="max-width: 800px; text-align: right; background: var(--dark-card); padding: 20px; border-radius: 15px;"></div>
         <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
+    <!-- صفحة من نحن -->
     <div id="about-page" class="page-section">
         <div class="card" style="max-width: 600px;">
             <h2 style="color: var(--secondary);">من نحن؟</h2>
-            <p>Muhanad Game Hub هو منصة تهدف لمساعدة اللاعبين في الوصول إلى أفضل روابط الألعاب الرسمية، ومشاركة نصائح الاحتراف لعام 2026.</p>
+            <p>Muhanad Game Hub هو منصة تهدف لمساعدة اللاعبين في الوصول إلى أفضل روابط الألعاب الرسمية، ومشاركة نصائح الاحتراف لعام 2026. نحن نؤمن بأن الألعاب هي وسيلة للإبداع والترفيه الراقي.</p>
         </div>
         <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
+    <!-- صفحة تواصل معنا -->
     <div id="contact-page" class="page-section">
         <div class="card" style="max-width: 500px;">
             <h2 style="color: #E1306C;">تواصل معنا</h2>
+            <p>يمكنك مراسلتنا عبر البريد الإلكتروني لأي اقتراح أو تعاون:</p>
             <p style="font-weight: bold; color: var(--secondary);">hsabfryfyr942@gmail.com</p>
         </div>
         <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
     </div>
 
+    <!-- صفحة الإدارة -->
     <div id="admin-page" class="page-section">
         <div class="admin-panel">
             <h3>⚙️ لوحة التحكم السرية</h3>
+            <p style="font-size: 0.8rem; color: #888;">(تغيير المحتوى وتصفير الأصوات متاح هنا فقط)</p>
             <input type="text" id="adm-news" class="admin-input" placeholder="تغيير الخبر العلوي">
             <hr>
             <input type="text" id="adm-v-title" class="admin-input" placeholder="عنوان التصويت الجديد">
@@ -153,8 +159,9 @@
 
     <script>
         const ADMIN_PASS = "muhanad2026";
+        // الرابط الخاص بموقعك للمشاركة
+        const SITE_URL = "https://hsabfryfyr942-ops.github.io/Muhanad-game-play--/";
 
-        // إضافة تصنيف السعر (free / paid)
         const games = [
             { name: 'Free Fire', link: 'https://ff.garena.com/', tips: 'الحساسية 95/100.', type: 'free' },
             { name: 'PUBG Mobile', link: 'https://www.pubgmobile.com/', tips: 'استخدم الجيروسكوب.', type: 'free' },
@@ -192,9 +199,11 @@
             const n = document.getElementById('adm-news').value;
             const t = document.getElementById('adm-v-title').value;
             const opts = [document.getElementById('o1').value, document.getElementById('o2').value, document.getElementById('o3').value, document.getElementById('o4').value];
+
             if(n) siteData.news = n;
             if(t) siteData.vTitle = t;
             if(opts[0] && opts[1]) { siteData.vOpts = opts; siteData.vVotes = [0,0,0,0]; }
+
             localStorage.setItem('muhanad_final_data', JSON.stringify(siteData));
             alert("تم تحديث المحتوى بنجاح!");
             showSection('home-page');
@@ -211,9 +220,14 @@
 
         function shareSite() {
             if (navigator.share) {
-                navigator.share({ title: 'Muhanad Game Hub', url: window.location.href });
+                navigator.share({ 
+                    title: 'Muhanad Game Hub', 
+                    text: 'اكتشف أفضل الألعاب والنصائح الاحترافية لعام 2026!',
+                    url: SITE_URL 
+                });
             } else {
-                alert("انسخ الرابط لمشاركته: " + window.location.href);
+                navigator.clipboard.writeText(SITE_URL);
+                alert("تم نسخ رابط الموقع بنجاح: " + SITE_URL);
             }
         }
 
@@ -228,7 +242,7 @@
                 </div>
             `).join('');
 
-            // --- تعديل فصل الألعاب ---
+            // فصل الألعاب المجانية والمدفوعة
             const freeGames = games.filter(g => g.type === 'free');
             const paidGames = games.filter(g => g.type === 'paid');
 
