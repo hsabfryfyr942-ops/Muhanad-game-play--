@@ -1,286 +1,368 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muhanad Game Hub 2026</title>
-    <style>
-        :root {
-            --primary: #dd3e17;
-            --secondary: #ffca28;
-            --success: #13b913;
-            --dark-card: rgba(20, 20, 30, 0.98);
-        }
+package com.example.myapplication
 
-        body { 
-            margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; 
-            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('https://hsabfryfyr942-ops.github.io/Muhanad-game-play--/مهند صورة.png');
-            background-size: cover; background-attachment: fixed; color: white;
-            overflow-x: hidden;
-        }
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-        /* شريط الخبر العلوي */
-        .news-ticker {
-            background: var(--primary); padding: 10px; overflow: hidden; white-space: nowrap;
-            font-weight: bold; border-bottom: 2px solid var(--secondary); position: fixed; top: 0; width: 100%; z-index: 1000;
-        }
-        .ticker-text { display: inline-block; animation: scroll 25s linear infinite; }
-        @keyframes scroll { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+// ==================== 1. نماذج البيانات (Data Models) ====================
+data class Product(
+    val id: String,
+    val name: String,
+    val price: Double,
+    val icon: String,
+    val desc: String,
+    val category: String
+)
 
-        /* تنسيق الصفحات */
-        .page-section { display: none; padding: 100px 20px 40px; text-align: center; min-height: 100vh; flex-direction: column; align-items: center; }
+data class Gift(
+    val id: String,
+    val name: String,
+    val icon: String,
+    val desc: String
+)
 
-        .nav-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px; width: 100%; max-width: 800px; margin: 20px auto;
-        }
+data class CartItem(
+    val product: Product,
+    var qty: Int,
+    val isGift: Boolean = false,
+    val customGiftName: String? = null
+)
 
-        .btn-nav {
-            background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
-            padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold;
-        }
-        .btn-nav:hover { background: var(--primary); transform: translateY(-3px); }
-
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; }
-        
-        .card { background: var(--dark-card); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
-
-        .admin-panel {
-            background: var(--dark-card); padding: 30px; border-radius: 20px;
-            width: 100%; max-width: 500px; border: 2px dashed var(--secondary);
-        }
-        .admin-input {
-            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;
-            background: #111; color: var(--secondary); border: 1px solid #444; box-sizing: border-box;
-        }
-
-        .back-btn { background: #444; color: white; padding: 12px 35px; border: none; border-radius: 8px; cursor: pointer; margin-top: 30px; }
-
-        .start-btn {
-            background: var(--primary); color: white; border: none; padding: 20px 50px;
-            font-size: 1.5rem; border-radius: 50px; cursor: pointer; font-weight: bold;
-            box-shadow: 0 0 20px var(--primary); transition: 0.3s; margin-top: 20px;
-        }
-
-        .category-title {
-            grid-column: 1 / -1;
-            text-align: right;
-            color: var(--secondary);
-            border-right: 5px solid var(--primary);
-            padding-right: 15px;
-            margin: 20px 0 10px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="news-ticker">
-        <div id="ticker-content" class="ticker-text">🕹️ مرحباً بك في Muhanad Game Hub | استخدم لوحة التحكم لتغيير هذا المحتوى!</div>
-    </div>
-
-    <!-- شاشة البداية -->
-    <div id="start-screen" class="page-section" style="display: flex; justify-content: center;">
-        <h1 style="color: var(--secondary); font-size: 3.5rem; margin-top: 50px;">Muhanad Game Hub</h1>
-        <p>مرحباً بك في عالم الألعاب والاحتراف</p>
-        <button class="start-btn" onclick="showSection('home-page')">ابدأ التصفح 🚀</button>
-    </div>
-
-    <!-- الصفحة الرئيسية -->
-    <div id="home-page" class="page-section">
-        <h1 style="color: var(--secondary); font-size: 2.5rem;">القائمة الرئيسية</h1>
-        <div class="nav-grid">
-            <button class="btn-nav" onclick="showSection('vote-page')" style="background: var(--success); color: black;">🗳️ ساحة التصويت</button>
-            <button class="btn-nav" onclick="showSection('games-page')">🎮 روابط الألعاب</button>
-            <button class="btn-nav" onclick="showSection('tips-page')">🔥 نصائح الاحتراف</button>
-            <button class="btn-nav" onclick="showSection('about-page')">ℹ️ من نحن</button>
-            <button class="btn-nav" onclick="showSection('contact-page')">📸 تواصل معنا</button>
-            <button class="btn-nav" onclick="shareSite()" style="background: #0077ff;">🔗 مشاركة الموقع</button>
-            <button class="btn-nav" onclick="showSection('admin-page')" style="border-color: var(--secondary); opacity: 0.5;">⚙️ الإدارة</button>
-        </div>
-    </div>
-
-    <!-- صفحة التصويت -->
-    <div id="vote-page" class="page-section">
-        <h2 id="v-display-title" style="color: var(--secondary);">جاري التحميل...</h2>
-        <div id="v-options-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%;"></div>
-        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
-    </div>
-
-    <!-- صفحة الألعاب -->
-    <div id="games-page" class="page-section">
-        <h2 style="color: var(--success);">روابط تحميل الألعاب</h2>
-        <div class="games-grid" id="games-list-container"></div>
-        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
-    </div>
-
-    <!-- صفحة النصائح -->
-    <div id="tips-page" class="page-section">
-        <h2 style="color: var(--primary);">دليل احتراف الألعاب</h2>
-        <div id="tips-container" style="max-width: 800px; text-align: right; background: var(--dark-card); padding: 20px; border-radius: 15px;"></div>
-        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
-    </div>
-
-    <!-- صفحة من نحن -->
-    <div id="about-page" class="page-section">
-        <div class="card" style="max-width: 600px;">
-            <h2 style="color: var(--secondary);">من نحن؟</h2>
-            <p>Muhanad Game Hub هو منصة تهدف لمساعدة اللاعبين في الوصول إلى أفضل روابط الألعاب الرسمية، ومشاركة نصائح الاحتراف لعام 2026. نحن نؤمن بأن الألعاب هي وسيلة للإبداع والترفيه الراقي.</p>
-        </div>
-        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
-    </div>
-
-    <!-- صفحة تواصل معنا -->
-    <div id="contact-page" class="page-section">
-        <div class="card" style="max-width: 500px;">
-            <h2 style="color: #E1306C;">تواصل معنا</h2>
-            <p>يمكنك مراسلتنا عبر البريد الإلكتروني لأي اقتراح أو تعاون:</p>
-            <p style="font-weight: bold; color: var(--secondary);">hsabfryfyr942@gmail.com</p>
-        </div>
-        <button class="back-btn" onclick="showSection('home-page')">العودة للرئيسية</button>
-    </div>
-
-    <!-- صفحة الإدارة -->
-    <div id="admin-page" class="page-section">
-        <div class="admin-panel">
-            <h3>⚙️ لوحة التحكم السرية</h3>
-            <p style="font-size: 0.8rem; color: #888;">(تغيير المحتوى وتصفير الأصوات متاح هنا فقط)</p>
-            <input type="text" id="adm-news" class="admin-input" placeholder="تغيير الخبر العلوي">
-            <hr>
-            <input type="text" id="adm-v-title" class="admin-input" placeholder="عنوان التصويت الجديد">
-            <input type="text" id="o1" class="admin-input" placeholder="خيار 1">
-            <input type="text" id="o2" class="admin-input" placeholder="خيار 2">
-            <input type="text" id="o3" class="admin-input" placeholder="خيار 3">
-            <input type="text" id="o4" class="admin-input" placeholder="خيار 4">
-            <button class="btn-nav" style="width:100%; background: var(--success); margin-bottom: 10px;" onclick="saveChanges()">حفظ وتحديث المحتوى ✅</button>
-            <button class="btn-nav" style="width:100%; background: var(--primary);" onclick="resetVotes()">تصفير جميع الأصوات 🗑️</button>
-        </div>
-        <button class="back-btn" onclick="showSection('home-page')">العودة</button>
-    </div>
-
-    <script>
-        const ADMIN_PASS = "muhanad2026";
-        // الرابط الخاص بموقعك للمشاركة
-        const SITE_URL = "https://hsabfryfyr942-ops.github.io/Muhanad-game-play--/";
-
-        const games = [
-            { name: 'Free Fire', link: 'https://ff.garena.com/', tips: 'الحساسية 95/100.', type: 'free' },
-            { name: 'PUBG Mobile', link: 'https://www.pubgmobile.com/', tips: 'استخدم الجيروسكوب.', type: 'free' },
-            { name: 'Spider-Man 2', link: 'https://www.playstation.com/ar-sa/games/marvels-spider-man-2/', tips: 'مهارات الأجنحة.', type: 'paid' },
-            { name: 'CoD: Black Ops', link: 'https://www.callofduty.com/playnow/blackops6', tips: 'اسمع صوت الأقدام.', type: 'paid' },
-            { name: 'Clash of Clans', link: 'https://supercell.com/en/games/clashofclans/', tips: 'الدفاع الجوي أولاً.', type: 'free' },
-            { name: 'Fortnite', link: 'https://www.fortnite.com/download', tips: 'تدرب على البناء.', type: 'free' },
-            { name: 'eFootball 2026', link: 'https://www.konami.com/efootball/', tips: 'التمرير السريع.', type: 'free' },
-            { name: 'Minecraft', link: 'https://www.minecraft.net/ar-sa/store/minecraft-deluxe-collection-pc', tips: 'دلو الماء للنجاة.', type: 'paid' },
-            { name: 'Forza Horizon 5', link: 'https://www.xbox.com/ar-SA/games/store/forza-horizon-5/9p1m9lj2ttst', tips: 'فرملة يدوية.', type: 'paid' },
-            { name: 'GTA V', link: 'https://www.rockstargames.com/gta-v', tips: 'استثمر في البورصة.', type: 'paid' },
-            { name: 'Elden Ring', link: 'https://en.bandainamcoent.eu/elden-ring/elden-ring', tips: 'احفظ حركات الخصم.', type: 'paid' },
-            { name: 'Among Us', link: 'https://www.innersloth.com/games/among-us/', tips: 'لا تستخدم الفتحات فجأة.', type: 'free' },
-            { name: 'Roblox', link: 'https://www.roblox.com/', tips: 'حماية الحساب.', type: 'free' },
-            { name: 'Genshin Impact', link: 'https://genshin.hoyoverse.com/', tips: 'تفاعلات العناصر.', type: 'free' },
-            { name: 'NFS Unbound', link: 'https://www.ea.com/games/need-for-speed/need-for-speed-unbound/buy', tips: 'اجمع النيترو.', type: 'paid' },
-            { name: 'God of War', link: 'https://www.playstation.com/ar-sa/games/god-of-war/', tips: 'الصد المثالي.', type: 'paid' }
-        ];
-
-        let siteData = JSON.parse(localStorage.getItem('muhanad_final_data')) || {
-            news: "🕹️ مرحباً بك في Muhanad Game Hub | تم تحديث الروابط لعام 2026!",
-            vTitle: "ما هو محتواك صوت الآن 👊📑🤔",
-            vOpts: ["مسلسلات", "افلام ", "انمي", "ديني "],
-            vVotes: [0, 0, 0, 0]
-        };
-
-        function showSection(id) {
-            if (id === 'admin-page' && prompt("كلمة السر:") !== ADMIN_PASS) return;
-            document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
-            document.getElementById(id).style.display = 'flex';
-            renderContent();
-        }
-
-        function saveChanges() {
-            const n = document.getElementById('adm-news').value;
-            const t = document.getElementById('adm-v-title').value;
-            const opts = [document.getElementById('o1').value, document.getElementById('o2').value, document.getElementById('o3').value, document.getElementById('o4').value];
-
-            if(n) siteData.news = n;
-            if(t) siteData.vTitle = t;
-            if(opts[0] && opts[1]) { siteData.vOpts = opts; siteData.vVotes = [0,0,0,0]; }
-
-            localStorage.setItem('muhanad_final_data', JSON.stringify(siteData));
-            alert("تم تحديث المحتوى بنجاح!");
-            showSection('home-page');
-        }
-
-        function resetVotes() {
-            if(confirm("هل أنت متأكد من تصفير جميع الأصوات؟")) {
-                siteData.vVotes = [0, 0, 0, 0];
-                localStorage.setItem('muhanad_final_data', JSON.stringify(siteData));
-                alert("تم تصفير الأصوات.");
-                renderContent();
+// ==================== 2. النشاط الرئيسي (MainActivity) ====================
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFF000000)) {
+                    MosiqatiMainApp()
+                }
             }
         }
+    }
+}
 
-        function shareSite() {
-            if (navigator.share) {
-                navigator.share({ 
-                    title: 'Muhanad Game Hub', 
-                    text: 'اكتشف أفضل الألعاب والنصائح الاحترافية لعام 2026!',
-                    url: SITE_URL 
-                });
-            } else {
-                navigator.clipboard.writeText(SITE_URL);
-                alert("تم نسخ رابط الموقع بنجاح: " + SITE_URL);
+// ==================== 3. التطبيق الرئيسي وإدارة الصفحات ====================
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MosiqatiMainApp() {
+    val context = LocalContext.current
+    var currentPage by remember { mutableStateOf("home") }
+
+    val cart = remember { mutableStateListOf<CartItem>() }
+    var couponInput by remember { mutableStateOf("") }
+    var activeDiscountPercent by remember { mutableStateOf(0) }
+
+    val productsList = remember {
+        listOf(
+            Product("oud", "العود الشرقي", 80.0, "🪕", "عود عربي فاخر بصوت أصيل.", "strings"),
+            Product("guitar", "الغيتار", 120.0, "🎸", "غيتار احترافي للمبتدئين والمحترفين.", "strings"),
+            Product("violin", "الكمان", 170.0, "🎻", "كمان احترافي بصوت ناعم.", "strings"),
+            Product("piano", "البيانو", 350.0, "🎹", "بيانو رقمي احترافي.", "keyboards"),
+            Product("drums", "الدرمز", 500.0, "🥁", "طقم درمز كامل للحفلات.", "drums"),
+            Product("tabla", "الطبلة", 45.0, "🪘", "طبلة شرقية قوية الإيقاع.", "drums"),
+            Product("saxophone", "الساكسفون", 260.0, "🎷", "ساكسفون احترافي لعشاق الجاز.", "wind"),
+            Product("trumpet", "البوق", 190.0, "🎺", "بوق نحاسي بصوت مميز.", "wind"),
+            Product("flute", "الناي", 95.0, "🪈", "ناي شرقي هادئ.", "wind"),
+            Product("microphone", "ميكروفون احترافي", 140.0, "🎤", "ميكروفون احترافي للتسجيل.", "studio")
+        )
+    }
+
+    val giftsList = remember {
+        listOf(
+            Gift("gift1", "ريشة غيتار مجانية", "🎸", "تُمنح تلقائياً عند الشراء."),
+            Gift("gift2", "حقيبة آلة موسيقية", "👜", "تُمنح تلقائياً عند الشراء."),
+            Gift("gift3", "سماعات موسيقية", "🎧", "تُمنح تلقائياً عند الشراء."),
+            Gift("gift4", "إضاءة موسيقية", "💡", "تُمنح تلقائياً عند الشراء.")
+        )
+    }
+
+    val couponsMap = remember { mapOf("MOSIQATI25" to 25, "MUSIC10" to 10, "MELODY15" to 15) }
+    val totalInstrumentsCount = cart.filter { !it.isGift }.sumOf { it.qty }
+
+    // تصحيح تحديث الهدايا لتجنب الـ Infinite Recomposition
+    LaunchedEffect(totalInstrumentsCount) {
+        val nonGifts = cart.filter { !it.isGift }
+        val newGifts = mutableListOf<CartItem>()
+
+        if (totalInstrumentsCount > 0) {
+            for (i in 0 until totalInstrumentsCount) {
+                val giftTemplate = giftsList[i % giftsList.size]
+                newGifts.add(
+                    CartItem(
+                        product = Product(giftTemplate.id, giftTemplate.name, 0.0, giftTemplate.icon, giftTemplate.desc, "gift"),
+                        qty = 1,
+                        isGift = true,
+                        customGiftName = "${giftTemplate.name} (هدية مجانية)"
+                    )
+                )
             }
         }
+        cart.clear()
+        cart.addAll(nonGifts + newGifts)
+    }
 
-        function renderContent() {
-            document.getElementById('ticker-content').innerText = siteData.news;
-            document.getElementById('v-display-title').innerText = siteData.vTitle;
-            document.getElementById('v-options-container').innerHTML = siteData.vOpts.map((o, i) => `
-                <div class="card" style="min-width:200px;">
-                    <h4>${o}</h4>
-                    <p>الأصوات: ${siteData.vVotes[i]}</p>
-                    <button class="btn-nav" style="width:100%; background:var(--primary);" onclick="vote(${i})">تصويت 👍</button>
-                </div>
-            `).join('');
+    val baseTotal = cart.filter { !it.isGift }.sumOf { it.product.price * it.qty }
+    val finalTotal = baseTotal - (baseTotal * (activeDiscountPercent / 100.0))
 
-            // فصل الألعاب المجانية والمدفوعة
-            const freeGames = games.filter(g => g.type === 'free');
-            const paidGames = games.filter(g => g.type === 'paid');
-
-            document.getElementById('games-list-container').innerHTML = `
-                <h3 class="category-title">🎁 ألعاب مجانية</h3>
-                ${freeGames.map(g => `
-                    <div class="card" style="border-top: 3px solid var(--success);">
-                        <h4>${g.name}</h4>
-                        <button class="btn-nav" style="width:100%; background:var(--success);" onclick="window.open('${g.link}')">تحميل مجاني</button>
-                    </div>
-                `).join('')}
-
-                <h3 class="category-title">💳 ألعاب مدفوعة</h3>
-                ${paidGames.map(g => `
-                    <div class="card" style="border-top: 3px solid var(--primary);">
-                        <h4>${g.name}</h4>
-                        <button class="btn-nav" style="width:100%; background:var(--primary);" onclick="window.open('${g.link}')">شراء / تفاصيل</button>
-                    </div>
-                `).join('')}
-            `;
-
-            document.getElementById('tips-container').innerHTML = games.map(g => `
-                <div style="margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:5px;">
-                    <strong style="color:var(--secondary)">${g.name}:</strong> ${g.tips}
-                </div>
-            `).join('');
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("🎼 موسيقاتي", fontWeight = FontWeight.Black, color = Color.White) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF0A0A0A))
+            )
+        },
+        bottomBar = {
+            ScrollableTabRow(
+                // تصحيح طريقة كتابة الـ when وترتيب الأسطر لتجنب خطأ الـ Compilation
+                selectedTabIndex = when(currentPage) {
+                    "home" -> 0
+                    "shop" -> 1
+                    "offers" -> 2
+                    "gifts" -> 3
+                    "about" -> 4
+                    "contact" -> 5
+                    else -> 6
+                },
+                containerColor = Color(0xFF0A0A0A),
+                edgePadding = 16.dp
+            ) {
+                val tabs = listOf("home" to "الرئيسية", "shop" to "المتجر", "offers" to "العروض", "gifts" to "الهدايا", "about" to "من نحن", "contact" to "تواصل معنا", "cart" to "العربة ($totalInstrumentsCount)")
+                tabs.forEach { (page, label) ->
+                    Tab(
+                        selected = currentPage == page,
+                        onClick = { currentPage = page },
+                        text = { Text(label, color = if (currentPage == page) Color(0xFFE67E22) else Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp) }
+                    )
+                }
+            }
+        },
+        containerColor = Color(0xFF000000)
+    ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+            when (currentPage) {
+                "home" -> HomeScreen(onNavigateToShop = { currentPage = "shop" })
+                "shop" -> ShopScreen(productsList) { product ->
+                    val existing = cart.find { it.product.id == product.id && !it.isGift }
+                    if (existing != null) {
+                        val index = cart.indexOf(existing)
+                        cart[index] = existing.copy(qty = existing.qty + 1)
+                    } else {
+                        cart.add(CartItem(product, 1))
+                    }
+                    Toast.makeText(context, "✨ تمت إضافة الآلة للسلة", Toast.LENGTH_SHORT).show()
+                }
+                "offers" -> OffersScreen(couponsMap)
+                "gifts" -> GiftsScreen(giftsList)
+                "about" -> AboutScreen()
+                "contact" -> ContactScreen()
+                "cart" -> CartScreen(
+                    cartItems = cart, totalPrice = finalTotal, couponText = couponInput,
+                    onCouponChange = { couponInput = it },
+                    onApplyCoupon = {
+                        if (couponsMap.containsKey(couponInput.trim().uppercase())) {
+                            activeDiscountPercent = couponsMap[couponInput.trim().uppercase()]!!
+                            Toast.makeText(context, "تم تطبيق الخصم!", Toast.LENGTH_SHORT).show()
+                        } else { Toast.makeText(context, "الكود غير صحيح", Toast.LENGTH_SHORT).show() }
+                    },
+                    onClearCart = { cart.clear(); activeDiscountPercent = 0 },
+                    onQtyChange = { item, amt ->
+                        val idx = cart.indexOf(item)
+                        if (idx != -1) {
+                            if (item.qty + amt <= 0) cart.removeAt(idx) else cart[idx] = item.copy(qty = item.qty + amt)
+                        }
+                    },
+                    onRemoveItem = { cart.remove(it) },
+                    onCheckout = {
+                        Toast.makeText(context, "✅ تم الشراء بنجاح!", Toast.LENGTH_LONG).show()
+                        cart.clear()
+                    }
+                )
+            }
         }
+    }
+}
 
-        function vote(i) {
-            siteData.vVotes[i]++;
-            localStorage.setItem('muhanad_final_data', JSON.stringify(siteData));
-            renderContent();
+// ==================== 4. الشاشات ====================
+@Composable
+fun AboutScreen() {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        item {
+            Text("من نحن", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
         }
+        item {
+            Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF141419)), shape = RoundedCornerShape(22.dp)) {
+                Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text("🎼 موسيقاتي", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE67E22))
+                    Text("موسيقاتي متجر أردني متخصص في بيع الآلات الموسيقية الأصلية والمعدات الصوتية الاحترافية الحديثة.", color = Color.White, fontSize = 14.sp)
+                    Text("بدأنا بهدف نشر الثقافة الموسيقية وتوفير أفضل الآلات للمبتدئين والمحترفين داخل الأردن.", color = Color.LightGray, fontSize = 14.sp)
+                }
+            }
+        }
+    }
+}
 
-        window.onload = () => {
-            document.getElementById('start-screen').style.display = 'flex';
-            renderContent();
-        };
-    </script>
-</body>
-</html>
+@Composable
+fun ContactScreen() {
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        item {
+            Text("تواصل معنا 📞", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        }
+        item {
+            Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF141419)), shape = RoundedCornerShape(22.dp)) {
+                Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    OutlinedTextField(value = name, onValueChange = { name = it }, placeholder = { Text("الاسم") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFFE67E22)))
+                    OutlinedTextField(value = email, onValueChange = { email = it }, placeholder = { Text("البريد الإلكتروني") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFFE67E22)))
+                    OutlinedTextField(value = message, onValueChange = { message = it }, placeholder = { Text("رسالتك") }, modifier = Modifier.fillMaxWidth(), minLines = 4, colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFFE67E22)))
+
+                    Button(
+                        onClick = {
+                            Toast.makeText(context, "تم إرسال الرسالة بنجاح ✓", Toast.LENGTH_SHORT).show()
+                            name = ""; email = ""; message = ""
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                    ) {
+                        Text("إرسال 🚀", color = Color.Black, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeScreen(onNavigateToShop: () -> Unit) {
+    Column(modifier = Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+        Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF141419)), shape = RoundedCornerShape(25.dp)) {
+            Column(modifier = Modifier.padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("مرحباً بكم في موسيقاتي", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("متجر موسيقاتي هو الوجهة الأولى في الأردن لعشاق الموسيقى والآلات الاحترافية.", color = Color.LightGray, textAlign = TextAlign.Center)
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(onClick = onNavigateToShop, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
+                    Text("تصفح المعرض الآن 🎸", color = Color.Black, fontWeight = FontWeight.Black)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ShopScreen(products: List<Product>, onAddToCart: (Product) -> Unit) {
+    var searchQuery by remember { mutableStateOf("") }
+    val filtered = products.filter { it.name.contains(searchQuery, ignoreCase = true) }
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        OutlinedTextField(value = searchQuery, onValueChange = { searchQuery = it }, placeholder = { Text("ابحث عن آلة موسيقية...") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFFE67E22)))
+        Spacer(modifier = Modifier.height(12.dp))
+        LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            items(filtered) { product ->
+                Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF141419)), shape = RoundedCornerShape(16.dp)) {
+                    Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(product.icon, fontSize = 40.sp)
+                        Text(product.name, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text("${product.price.toInt()} دينار", color = Color(0xFF2ECC71))
+                        Button(onClick = { onAddToCart(product) }, colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent), modifier = Modifier.border(1.dp, Color.White, RoundedCornerShape(8.dp))) {
+                            Text("إضافة ➕")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun OffersScreen(coupons: Map<String, Int>) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text("العروض والخصومات 🎫", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        coupons.forEach { (code, discount) ->
+            Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF141419)), modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("خصم $discount%", fontSize = 20.sp, color = Color(0xFFE67E22), fontWeight = FontWeight.Bold)
+                    Text(code, color = Color(0xFF2ECC71), fontWeight = FontWeight.Black)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun GiftsScreen(gifts: List<Gift>) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text("قسم الهدايا المجانية 🎁", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.height(12.dp))
+        LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            items(gifts) { gift ->
+                Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF141419))) {
+                    Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(gift.icon, fontSize = 35.sp)
+                        Text(gift.name, color = Color.White, textAlign = TextAlign.Center)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CartScreen(cartItems: List<CartItem>, totalPrice: Double, couponText: String, onCouponChange: (String) -> Unit, onApplyCoupon: () -> Unit, onClearCart: () -> Unit, onQtyChange: (CartItem, Int) -> Unit, onRemoveItem: (CartItem) -> Unit, onCheckout: () -> Unit) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedTextField(value = couponText, onValueChange = onCouponChange, placeholder = { Text("كود الخصم") }, modifier = Modifier.weight(1f))
+            Button(onClick = onApplyCoupon, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE67E22))) { Text("تطبيق") }
+            Button(onClick = onClearCart, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE74C3C))) { Text("تفريغ") }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(cartItems) { item ->
+                Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF141419)), modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(item.product.icon, fontSize = 25.sp)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(item.customGiftName ?: item.product.name, color = Color.White)
+                            Text(if (item.isGift) "0 دينار" else "${item.product.price.toInt()} × ${item.qty}", color = Color.LightGray)
+                        }
+                        if (!item.isGift) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Button(onClick = { onQtyChange(item, -1) }) { Text("-") }
+                                Text("${item.qty}", color = Color.White, modifier = Modifier.padding(horizontal = 4.dp))
+                                Button(onClick = { onQtyChange(item, 1) }) { Text("+") }
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Button(onClick = { onRemoveItem(item) }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE74C3C))) { Text("حذف") }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Text("الإجمالي: ${String.format("%.2f", totalPrice)} دينار", fontSize = 18.sp, color = Color(0xFF2ECC71), fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.End)
+        Button(onClick = onCheckout, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Color.White)) { Text("تأكيد الطلب 💳", color = Color.Black) }
+    }
+}
